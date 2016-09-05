@@ -1,6 +1,8 @@
 Autor: Luis Fueris Martín
 Fecha: 1-09-2016
 Coms: Documentación sobre el backup [cfreds_2015_data_leakage_pc.dd].
+URL: http://www.cfreds.nist.gov/data_leakage_case/data-leakage-case.html
+
 
 Documentación
 =============
@@ -35,13 +37,14 @@ Montamos los dispositivos [/dev/mapper/loop0p[12]]:
 $> sudo mount -o ro,noexec,nodev,nosuid /dev/mapper/loop0p1 /mnt/windows/pc1/
 $> sudo mount -o ro,noexec,nodev,nosuid /dev/mapper/loop0p2 /mnt/windows/pc2/
 
-Herramienta de linux para manipular los registros de linux
+Herramienta de [Linux] para manipular los registros de [Windoze]:
+
 >> Forensic Registry EDitor
->> wget -q http://deb.pinguin.lu/debsign_public.key -O- | sudo apt-key add - 
+$> wget -q http://deb.pinguin.lu/debsign_public.key -O- | sudo apt-key add - 
 
 Nos descargamos el [*.deb], en [https://pinguin.lu/pkgserver]
 
-Da muchos problemas en cuanto a su instalación... Es mejor utilizar el comando
+Sin embargo da muchos problemas en cuanto a su instalación... Es mejor utilizar el comando
 [chntpw]. Con la opción [-e]
 
 ---------------------------------------------------------------------------
@@ -49,18 +52,17 @@ Da muchos problemas en cuanto a su instalación... Es mejor utilizar el comando
        write support). For a slightly more powerful editor see reged
 ---------------------------------------------------------------------------
 
-Nueva herramienta para visualizar los registros de [Windoze] en 
-[Linux] -> [RegRipper]
+Nueva herramienta para visualizar los registros de [Windoze] en  [Linux] -> [RegRipper]
+
 
 Instalación:
 --------------------------------------------------------------------
 DEBIAN/UBUNTU
-# apt-get install cpanminus make unzip wget
+$> apt-get install cpanminus make unzip wget
 FEDORA
-# dnf install perl-App-cpanminus.noarch make unzip wget perl-Archive-Extract-gz-gzip.noarch which
+$> dnf install perl-App-cpanminus.noarch make unzip wget perl-Archive-Extract-gz-gzip.noarch which
 CENTOS/REDHAT
-# yum install  perl-App-cpanminus.noarch make unzip wget perl-Archive-Extract-gz-gzip.noarch which
-
+$> yum install  perl-App-cpanminus.noarch make unzip wget perl-Archive-Extract-gz-gzip.noarch which
 
 $> mkdir /usr/local/lib/rip-lib
 $> wget https://github.com/keydet89/RegRipper2.8
@@ -81,11 +83,11 @@ $> sed -i 's/require "plugins\\\\".$plugins{$i}."\\.pl";/require "plugins\/".$pl
 
 --------------------------------------------------------------------
 
-[cpanm] es una herramienta para conseguir, descomprimir, construir e instalar
-modulos de Perl.
+[cpanm] es una herramienta para conseguir, descomprimir, construir e instalar modulos de Perl.
 
-Example:
 
+Ejemplo [RegRipper]
+---------------------------------------------------------------------------------------------------------
 [leviathan3773@latitude:RegRipper2.8 ] $ ./rip.pl -r /mnt/windows/hdd/Windows/System32/config/SAM -f sam
 Parsed Plugins file.
 Launching samparse v.20160203
@@ -269,12 +271,11 @@ Analysis Tips:
  - Correlate the user SIDs to the output of the ProfileList plugin
 
 samparse complete.
-----------------------------------------
+------------------------------------------------------------------------------------------------------------
+
 
 Para extraer de los registros el [Hash] de los passwords. 
-
-
-------------------------------------------------------------------
+---------------------------------------------------------------------------------------
 
 Normally, Windows store passwords on single computer systems in the
  registry in a hashed format using the NTLM algorithm. The registry file is located in
@@ -298,10 +299,10 @@ HKLM\SAM\SAM\Domains\Account\Users\00000XXX
 
 with a value named V. The hash is stored at a variable offset that is stored 
 at offset 0x9C and is a 4 byte little endian value.
-------------------------------------------------------------------
+------------------------------------------------------------------------------------
+
 
 Otra herramientas interesante para realizar un dump de los [hashes]:
-
 ------------------------------------------------------------------
 Physical access
 
@@ -346,24 +347,18 @@ Example of retrieving the SAM hashes from a Windows partition /dev/sda1:
 ---------------------------------------------------------------------------------------------
 
 [bkhive] se descarga pero no se instala... la solución es la siguiente:
--------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------
 
-The
-apt-get install bkhive
-command runs, but bkhive is not actually installed. I found this workaround, however, downgrading to previous versions of bkhive and pwdump2:
+The apt-get install bkhive command runs, but bkhive is not actually installed. I 
+found this workaround, however, downgrading to previous versions of bkhive and pwdump2:
 
-apt-get purge bkhive
-apt-get purge pwdump2
-
-apt-get purge samdump2
-
-curl http://http.us.debian.org/debian/poo...1-1.1_i386.deb > samdump2_1.1.1-1.1_i386.deb
-
-dpkg -i samdump2_1.1.1-1.1_i386.deb
-
-curl http://http.us.debian.org/debian/poo...1.1-1_i386.deb > bkhive_1.1.1-1_i386.deb
-
-dpkg -i bkhive_1.1.1-1_i386.deb
+$> apt-get purge bkhive
+$> apt-get purge pwdump2
+$> apt-get purge samdump2
+$> curl http://http.us.debian.org/debian/poo...1-1.1_i386.deb > samdump2_1.1.1-1.1_i386.deb
+$> dpkg -i samdump2_1.1.1-1.1_i386.deb
+$> curl http://http.us.debian.org/debian/poo...1.1-1_i386.deb > bkhive_1.1.1-1_i386.deb
+$> dpkg -i bkhive_1.1.1-1_i386.deb
 
 https://packages.debian.org/source/wheezy/bkhive
 
