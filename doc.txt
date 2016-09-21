@@ -1,5 +1,5 @@
 Autor: Luis Fueris Martín
-Fecha: 9-09-2016
+Fecha: 1-09-2016
 Coms: Documentación sobre el backup [cfreds_2015_data_leakage_pc.dd].
 URL: http://www.cfreds.nist.gov/data_leakage_case/data-leakage-case.html
 
@@ -329,7 +329,7 @@ Otra herramientas interesante para realizar un dump de los [hashes]:
 ------------------------------------------------------------------
 Physical access
 
-Given physical access to the system, typically during a laptop assessment 
+df -Given physical access to the system, typically during a laptop assessment 
 or a successful social engineering engagement, the preferred way to safely 
 dump the password hashes is to power off the machine, enter the BIOS menu 
 at power-on time, review the boot order to allow boot from the optical drive 
@@ -416,3 +416,66 @@ $> sudo apt install foremost
 $> sudo foremost -t pdf -i /dev/mapper/loop0p2 -o ~/Escritorio/Foremost
 $> sudo foremost -t all -i /dev/mapper/loop0p2 -o ~/Escritorio/Foremost
 
+
+Para extraer los [ShellBags], es decir, las trazas de que directorios ha estado
+entrando y saliendo un determinado usuario, se puede utilizar [sbag] (EN PRUEBA,
+PROBLEMAS CON LICENCIA??)
+
+Otra herramienta interesante para extraer las ultimas ejecuciones de diversos programas
+sería [ShimCacheParser]. Es utilizada para extraer la cache llamada
+[Application Compatibility Cache] ("Shimcache").
+	· https://github.com/leviathan2701/ShimCacheParser
+
+$> git clone https://github.com/leviathan2701/ShimCacheParser
+
+Un ejemplo de su ejecución sería:
+
+$> sudo python ShimCacheParser.py -v -i /mnt/windows/hdd/Windows/System32/config/SYSTEM -t -o SYSTEMCfreds.txt
+
+
+$> git clone https://github.com/leviathan2701/ShimCacheParser
+
+Un ejemplo de su ejecución sería:
+
+$> sudo python ShimCacheParser.py -v -i /mnt/windows/hdd/Windows/System32/config/SYSTEM -t -o SYSTEMCfreds.txt
+
+-------------------------------------------------------------------------------
+During a recent investigation, we found references to timestamps associated with
+probable malicious files that preceded the earliest known date of compromise. These 
+Application Compatibility Cache (“Shimcache”) timestamps were the only evidence linked to this timeframe.  
+
+The Windows Shimcache was created by Microsoft beginning in Windows XP to track 
+compatibility issues with executed programs. The cache stores various file metadata 
+depending on the operating system, such as:
+
+    File Full Path
+    File Size
+    $Standard_Information (SI) Last Modified time
+    Shimcache Last Updated time
+    Process Execution Flag
+
+Similar to a log file, the Shimcache also "rolls" data, meaning that the oldest data 
+is replaced by new entries. The amount of data retained varies by operating system.  
+Additional information on Shimcache can be found in the Mandiant blog post by Andrew Davis.
+
+It is important to understand there may be entries in the Shimcache that were not actually 
+executed. Based on our current understanding of the Shimcache, there are two actions 
+that can cause the Shimcache to record an entry:
+
+    A file is executed. This is recorded on all versions of Windows beginning with XP.
+    On Windows Vista, 7, Server 2008, and Server 2012, the Application Experience 
+	Lookup Service may record Shimcache entries for files in a directory that a user 
+	interactively browses. For example, if a directory contains the files “foo.txt” 
+	and “bar.exe”, a Windows 7 system may record entries for these two files in the Shimcache.
+
+Microsoft designed the Shimcache in Windows Vista, 7, Server 2008 and Server 2012 to incorporate 
+a "Process Execution Flag" category for each entry. The actual name and true purpose 
+of this flag is still unknown, however, we have observed that the Client/Server 
+Runtime Subsystem (CSRSS) process will set this flag during process creation/execution
+on those operating systems. Simply put, the Process Execution Flag, where present, 
+makes it easier for the investigator to determine whether or not an entry was 
+executed or if this entry was added a result of an activity other than file 
+execution, such as interactively browsing a directory. These entries can be 
+easily spotted by observing if the Process Execution Flag is marked as FALSE. 
+Below is an example of entries from a Windows Server 2012 Shimcache. Notice the 
+two entries which were not executed.
