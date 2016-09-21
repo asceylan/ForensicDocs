@@ -2038,6 +2038,7 @@ Email: iaman.informant.personal@gmail.com
 /mnt/windows/boot/Users/informant/AppData/Local/Microsoft/Windows/Burn/Burn
 
 44 . When did the suspect burn CD-R?
+[Hint: It may be one or more times.]
 
 Useful information
 ==================
@@ -2066,26 +2067,366 @@ Node has 2 subkeys and 4 values
 Value <DefaultToMastered> of type REG_DWORD (4), data length 4 [0x4]
 0x00000000
 
+.
 
+===============================
+[leviathan3773@latitude:systemprofile ] $ chntpw -e ntuset.dat
 
-45 . [Hint: It may be one or more times.]
+\Control Panel\International\Geo> cat Nation
+Value <Nation> of type REG_SZ (1), data length 8 [0x8]
+244
+
+In [https://msdn.microsoft.com/en-us/library/windows/desktop/dd374073(v=vs.85).aspx]
+...
+0xF0    240 Uganda
+0xF1    241 Ukraine
+0xF2    242 United Kingdom
+0xF4    244 United States
+0xF5    245 Burkina Faso
+0xF6    246 Uruguay
+...
+===============================
+
+[leviathan3773@latitude:IAMAN CD1 ] $ df -hT
+S.ficheros                   Tipo     Tamaño Usados  Disp Uso% Montado en
+udev                         devtmpfs   3,9G      0  3,9G   0% /dev
+tmpfs                        tmpfs      788M   9,5M  779M   2% /run
+/dev/sdb1                    ext4       103G    87G   11G  90% /
+tmpfs                        tmpfs      3,9G    12M  3,9G   1% /dev/shm
+tmpfs                        tmpfs      5,0M   4,0K  5,0M   1% /run/lock
+tmpfs                        tmpfs      3,9G      0  3,9G   0% /sys/fs/cgroup
+tmpfs                        tmpfs      788M    76K  788M   1% /run/user/1000
+/home/leviathan3773/.Private ecryptfs   103G    87G   11G  90% /home/leviathan3773
+/dev/mapper/loop0p1          fuseblk    100M    25M   76M  25% /mnt/windows/boot
+/dev/mapper/loop0p2          fuseblk     20G    17G  3,4G  84% /mnt/windows/hdd
+/dev/mapper/loop1p1          vfat      1020M   224M  797M  22% /media/leviathan3773/IAMAN $_@
+/dev/loop2                   udf        703M   703M     0 100% /media/leviathan3773/IAMAN CD1
+/dev/sda2                    fuseblk    112G   107G  4,7G  96% /media/leviathan3773/E062E8AC62E8891C
+[leviathan3773@latitude:IAMAN CD1 ] $ 
+
+UDF (Universal Disk Format)
+
 46 . What files were copied from PC to CD-R?
-47 . [Hint: Just use PC image only. You can examine transaction logs of the file system for this task.]
+[Hint: Just use PC image only. You can examine transaction logs of the file system for this task.]
+
+First, we extract remove files...
+
+$> sudo foremost -t all -i /dev/loop2 -o ~/Escritorio/IAMAN_CD1
+
+[leviathan3773@latitude:IAMAN_CD1 ] $ tree
+.
+├── audit.txt
+├── docx
+├── gif
+├── jpg
+├── ole
+├── png
+├── ppt
+├── pptx
+├── wav
+├── xlsx
+└── zip
+
+10 directories, 1 file
+
 48 . What files were opened from CD-R?
+
+In /mnt/windows/hdd/Users/informant/AppData/Roaming/Microsoft/Windows/Recent/AutomaticDestinations
+-------------------------------------------------------------
+[leviathan3773@latitude:AutomaticDestinations ] $ ls -lat
+total 92
+drwxrwxrwx 1 root root  8192 mar 25  2015 ..
+-rwxrwxrwx 2 root root 17408 mar 25  2015 47bb2136fda3f1ed.automaticDestinations-ms
+drwxrwxrwx 1 root root  4096 mar 25  2015 .
+-rwxrwxrwx 2 root root 17920 mar 25  2015 1b4dd67f29cb1962.automaticDestinations-ms
+-rwxrwxrwx 2 root root  3072 mar 25  2015 e36bfc8972e5ab1d.automaticDestinations-ms
+-rwxrwxrwx 2 root root  7680 mar 25  2015 7e4dca80246863e3.automaticDestinations-ms
+-rwxrwxrwx 2 root root 17408 mar 23  2015 4cc9bcff1a772a63.automaticDestinations-ms
+-rwxrwxrwx 2 root root  4608 mar 23  2015 69bacc0499d41c4.automaticDestinations-ms
+-------------------------------------------------------------
+
+
+Clear and Manage Win7 Jump Lists
+
+Windows 7 Jump Lists are stored in these paths. I found this short list of filenames that are associated with specific applications:
+
+PATH: %AppData%\Microsoft\Windows\Recent\AutomaticDestinations
+
+28c8b86deab549a1.automaticDestinations-ms = IE8 Pinned and Recent a7bd71699cd38d1c.automaticDestinations-ms = Word 2010 Pinned and Recent adecfb853d77462a.automaticDestinations-ms = Word 2007 Pinned and Recent a8c43ef36da523b1.automaticDestinations-ms = Word 2003 Pinned and Recent 1b4dd67f29cb1962.automaticDestinations-ms = Windows Explorer Pinned and Recent 918e0ecb43d17e23.automaticDestinations-ms = Notepad Pinned and Recent d7528034b5bd6f28.automaticDestinations-ms = Windows Live Mail Pinned and Recent c7a4093872176c74.automaticDestinations-ms = Paint Shop Pro Pinned and Recent b91050d8b077a4e8.automaticDestinations-ms = Media Center f5ac5390b9115fdb.automaticDestinations-ms = PowerPoint 2007 23646679aaccfae0.automaticDestinations-ms = Adobe Reader 9 aff2ffdd0862ff5c.automaticDestinations-ms = Visual Studio 2012
+
+PATH: %AppData%\Microsoft\Windows\Recent\CustomDestinations
+
+28c8b86deab549a1.customDestinations-ms = IE8 Frequent & Tasks
+
+Useful information:
+
+[leviathan3773@latitude:AutomaticDestinations ] $ strings 1b4dd67f29cb1962.automaticDestinations-ms | grep D:
+/D:\
+D:\de\winter_whether_advisory.zip
+/D:\
+/D:\
+/D:\
+/D:\
+
+In [/mnt/windows/hdd/Users/informant/AppData/Roaming/Microsoft/Windows/Recent]
+
+[leviathan3773@latitude:Recent ] $ ls -la *.lnk
+-rwxrwxrwx 2 root root   243 mar 24  2015 CD Drive (2).lnk
+-rwxrwxrwx 2 root root   243 mar 24  2015 CD Drive.lnk
+-rwxrwxrwx 1 root root   555 mar 23  2015 final.lnk
+-rwxrwxrwx 2 root root   348 mar 24  2015 Koala.jpg.lnk
+-rwxrwxrwx 2 root root   361 mar 24  2015 Penguins.jpg.lnk
+-rwxrwxrwx 2 root root  1631 mar 23  2015 pricing decision.lnk
+-rwxrwxrwx 2 root root   675 mar 25  2015 Resignation_Letter_(Iaman_Informant).docx.lnk
+-rwxrwxrwx 2 root root   602 mar 25  2015 Resignation_Letter_(Iaman_Informant).xps.lnk
+-rwxrwxrwx 1 root root 11732 mar 23  2015 secret.lnk
+-rwxrwxrwx 2 root root 13542 mar 23  2015 [secret_project]_design_concept.lnk
+-rwxrwxrwx 2 root root   793 mar 23  2015 [secret_project]_final_meeting.pptx.lnk
+-rwxrwxrwx 2 root root  1952 mar 23  2015 (secret_project)_pricing_decision.xlsx.lnk
+-rwxrwxrwx 2 root root 13475 mar 23  2015 [secret_project]_proposal.lnk
+-rwxrwxrwx 2 root root   353 mar 24  2015 Tulips.jpg.lnk
+-rwxrwxrwx 2 root root   453 mar 24  2015 winter_whether_advisory.zip.lnk
+
+[leviathan3773@latitude:Recent ] $ strings Koala.jpg.lnk 
+/D:\
+Koala.jpg
+IAMAN CD
+D:\Koala.jpg
+1SPS
+[leviathan3773@latitude:Recent ] $ strings Penguins.jpg.lnk 
+/D:\
+Penguins.jpg
+IAMAN CD
+D:\Penguins.jpg
+1SPS
+[leviathan3773@latitude:Recent ] $ strings Tulips.jpg.lnk 
+/D:\
+Tulips.jpg
+IAMAN CD
+D:\Tulips.jpg
+1SPS
+[leviathan3773@latitude:Recent ] $ strings winter_whether_advisory.zip.lnk 
+/D:\
+WINT#F~U.ZIP
+IAMAN CD
+D:\de\winter_whether_advisory.zip
+1SPS
+
+
 49 . Identify all timestamps related to a resignation file in Windows Desktop.
-50 . [Hint: the resignation file is a DOCX file in NTFS file system.]
+[Hint: the resignation file is a DOCX file in NTFS file system.]
+
+[leviathan3773@latitude:Desktop ] $ stat Resignation_Letter_\(Iaman_Informant\).docx 
+  Fichero: 'Resignation_Letter_(Iaman_Informant).docx'
+  Tamaño: 11893         Bloques: 24         Bloque E/S: 4096   fichero regular
+Dispositivo: fc02h/64514d   Nodo-i: 23554       Enlaces: 2
+Acceso: (0777/-rwxrwxrwx)  Uid: (    0/    root)   Gid: (    0/    root)
+Acceso: 2015-03-24 19:59:30.595570900 +0100
+Modificación: 2015-03-24 19:59:30.611171000 +0100
+      Cambio: 2015-03-24 19:59:30.611171000 +0100
+    Creación: -
+[leviathan3773@latitude:Desktop ] $ 
+
+Nothing else
+
 51 . How and when did the suspect print a resignation file?
+
+There are not real printers devices...
+
+--------------------------------------------------------------------------------------------------
+The Microsoft XPS Document Writer (MXDW) is a print-to-file driver that enables a Windows 
+application to create XML Paper Specification (XPS) document files on versions of Windows 
+starting with Windows XP with Service Pack 2 (SP2). Using the MXDW makes it possible for a 
+Windows application to save its content as an XPS document without changing any of the 
+application's program code.
+--------------------------------------------------------------------------------------------------
+
+In [HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Print\Printers\]
+
+
+
+[leviathan3773@latitude:RegRipper2.8 ] $ ./rip.pl -r /mnt/windows/hdd/Users/informant/NTUSER.DAT -p printers
+Launching printers v.20090223
+printers v.20090223
+(NTUSER.DAT) Get user's printers
+
+Software\Microsoft\Windows NT\CurrentVersion\PrinterPorts
+LastWrite Time: Wed Mar 25 13:06:09 2015
+
+  Microsoft XPS Document Writer (winspool,Ne00:,15,45)
+  Fax (winspool,Ne01:,15,45)
+
+Default Printer (via CurrentVersion\Windows): Microsoft XPS Document Writer,winspool,Ne00:
+[leviathan3773@latitude:RegRipper2.8 ] $ 
+
 52 . Where are ‘Thumbcache’ files located?
+
+What is "Thumbcache"
+-------------------------------------------------------------------------
+If you’ve accidentally downloaded a sensitive image file that can get you 
+into trouble, deleting the file from Windows is just not enough even if 
+you’ve perform a secusure wipe. Forensics people can still retrieve the image 
+from your computer, thanks to the thumbnail caching feature. When you open a 
+folder containing a lot of images, the thumbnail caching feature will greatly 
+improve the time that takes to show the images via thumbnails rather than 
+regenerating them every time you get in to the folder.
+Read More: https://www.raymond.cc/blog/what-you-should-know-about-thumbsdb-file/
+-------------------------------------------------------------------------
+
+[leviathan3773@latitude:Explorer ] $ ls
+ExplorerStartupLog.etl          thumbcache_1024.db  thumbcache_32.db  thumbcache_idx.db
+ExplorerStartupLog_RunOnce.etl  thumbcache_256.db   thumbcache_96.db  thumbcache_sr.db
+[leviathan3773@latitude:Explorer ] $ pwd
+/mnt/windows/hdd/Users/informant/AppData/Local/Microsoft/Windows/Explorer
+
 53 . Identify traces related to confidential files stored in Thumbcache.
-54 . (Include ‘256’ only)
+(Include ‘256’ only)
+
+file:///home/leviathan3773/Escritorio/cfreds/thumbcache/report256/Report.html
+
 55 . Where are Sticky Note files located?
+[leviathan3773@latitude:hdd ] $ find . -name "Sticky*"
+./Users/informant/AppData/Roaming/Microsoft/Sticky Notes
+./Users/informant/AppData/Roaming/Microsoft/Sticky Notes/StickyNotes.snt
+
 56 . Identify notes stored in the Sticky Note file.
+
+[leviathan3773@latitude:Sticky Notes ] $ strings StickyNotes.snt 
+{\rtf1\ansi\ansicpg1252\deff0\deflang1033{\fonttbl{\f0\fnil\fcha0
+rset0 Segoe Print;}{\f1\fnil Segoe Print;}}
+{\*\generator Msftedit 5.41.21.2510;}\viewkind4\uc1\pard\tx360\tx720\tx1080\tx1440\tx1800\tx2160\tx2520\tx2880\tx3240\tx3600\tx3960\tx4320\tx4680\tx5040\tx5400\tx5760\tx6120\tx6480\tx6840\tx7200\tx7560\tx7920\tx8280\tx8640\tx9000\tx9360\tx9720\tx10080\tx10440\tx10800\tx11160\tx11520\highlight0\f0\fs22 Tomorrow...\par
+\par
+Everything will be OK...\par
+\par
+\lang9\f1\par
+[leviathan3773@latitude:Sticky Notes ] $
+
 57 . Was the ‘Windows Search and Indexing’ function enabled? How can you identify it?
+
+--------------------------------------------------------------------------------------------------------
+SearchIndexer.exe is the Windows service that handles indexing of your files for 
+Windows Search, which fuels the file search engine built into Windows that powers everything 
+from the Start Menu search box to Windows Explorer, and even the Libraries feature.
+
+You can see this for yourself by simply right-clicking on the process name in the 
+Task Manager list, and then choosing Go to Service(s) from the menu.
+--------------------------------------------------------------------------------------------------------
+
+Paths:
+
+HKLM\SOFTWARE\Microsoft\Windows Search\
+HKLM\SOFTWARE\Microsoft\Windows Search\Databases\Windows (value: FileName)
+HKU\informant\Software\Microsoft\Windows Search\
+HKLM\SYSTEM\ControlSet001\services\WSearch\ (SearchIndexer service  Start up automatically)
+...
+====================================================================================
+
+\Microsoft\Windows Search> cat SystemIndexNormalization
+Value <SystemIndexNormalization> of type REG_DWORD (4), data length 4 [0x4]
+0x00000001
+
+\Microsoft\Windows Search> 
+
+====================================================================================
+
+If FileName exists, Windows search and indexing are enabled.
+
+\Microsoft\Windows Search\Databases> cd Windows
+
+\Microsoft\Windows Search\Databases\Windows> ls
+Node has 0 subkeys and 2 values
+  size     type              value name             [value if type DWORD]
+   140  1 REG_SZ             <FileName>
+   118  1 REG_SZ             <LogPath>
+
+\Microsoft\Windows Search\Databases\Windows> cat FileName
+Value <FileName> of type REG_SZ (1), data length 140 [0x8c]
+C:\ProgramData\Microsoft\Search\Data\Applications\Windows\Windows.edb
+
+
+\Microsoft\Windows Search\Databases\Windows> cat LogPath
+Value <LogPath> of type REG_SZ (1), data length 118 [0x76]
+C:\ProgramData\Microsoft\Search\Data\Applications\Windows\
+
+
+\Microsoft\Windows Search\Databases\Windows> 
+
+====================================================================================
+
+(...)\Microsoft\Windows Search\Gather\Windows> ls
+Node has 1 subkeys and 0 values
+  key name
+  <SystemIndex>
+
+(...)\Microsoft\Windows Search\Gather\Windows> 
+
+====================================================================================
+\ControlSet001\services\WSearch> ls
+Node has 0 subkeys and 13 values
+  size     type              value name             [value if type DWORD]
+    92  1 REG_SZ             <DisplayName>
+     4  4 REG_DWORD          <ErrorControl>             1 [0x1]
+   102  2 REG_EXPAND_SZ      <ImagePath>
+     4  4 REG_DWORD          <Start>                    2 [0x2]
+     4  4 REG_DWORD          <Type>                    16 [0x10]
+    92  1 REG_SZ             <Description>
+    14  7 REG_MULTI_SZ       <DependOnService>
+    24  1 REG_SZ             <ObjectName>
+     4  4 REG_DWORD          <ServiceSidType>           1 [0x1]
+   284  7 REG_MULTI_SZ       <RequiredPrivileges>
+     4  4 REG_DWORD          <FailureActionsOnNonCrashFailures> 1       [0x1]
+     4  4 REG_DWORD          <DelayedAutoStart>         1 [0x1]
+    44  3 REG_BINARY         <FailureActions>
+
+\ControlSet001\services\WSearch> cat DelayedAutoStart
+Value <DelayedAutoStart> of type REG_DWORD (4), data length 4 [0x4]
+0x00000001
+
+\ControlSet001\services\WSearch> 
+
 58 . If it was enabled, what is a file path of the ‘Windows Search’ index database?
+
+\Microsoft\Windows Search\Databases\Windows> ls
+Node has 0 subkeys and 2 values
+  size     type              value name             [value if type DWORD]
+   140  1 REG_SZ             <FileName>
+   118  1 REG_SZ             <LogPath>
+
+\Microsoft\Windows Search\Databases\Windows> cat FileName
+Value <FileName> of type REG_SZ (1), data length 140 [0x8c]
+C:\ProgramData\Microsoft\Search\Data\Applications\Windows\Windows.edb
+
+
 59 . What kinds of data were stored in Windows Search database?
+
+View de database with [ESEDatabaseView]:
+
+[leviathan3773@latitude:ESEDatabaseViewer ] $ wine ESEDatabaseView.exe 
+
+In [SystemIndex_0A (Table ID= 15, 378 Columns)]:
+
+    · System_ItemFolderPathDisplay
+    · System_ItemPathDisplay
+    · System_Search_Store
+    · System_ItemNameDisplay
+    · System_ItemName 
+
 60 . Find traces of Internet Explorer usage stored in Windows Search database.
-61 . (It should be considered only during a date range between 2015-03-22 and 2015-03-23.)
+(It should be considered only during a date range between 2015-03-22 and 2015-03-23.)
+Windows.edb
+> ‘System_ItemPathDisplay’ column
+> ‘System_Message_FromName’ column
+> ‘System_Message_ToAddress’ column
+> ‘System_Message_ToName’ column
+> ‘System_Message_DateSent’ column
+> ‘System_Message_DateReceived’ column
+> ‘System_Message_AttachmentNames’ column
+> ‘System_Search_AutoSummary’ column
+> ‘System_Search_AutoSummary’ column
+
 62 . List the e-mail communication stored in Windows Search database.
+
+
 63 . (It should be considered only during a date range between 2015-03-23 and 2015-03-24.)
 64 . List files and directories related to Windows Desktop stored in Windows Search database.
 65 . (Windows Desktop directory: \Users\informant\Desktop\)
