@@ -2413,7 +2413,13 @@ In [SystemIndex_0A (Table ID= 15, 378 Columns)]:
 
 60 . Find traces of Internet Explorer usage stored in Windows Search database.
 (It should be considered only during a date range between 2015-03-22 and 2015-03-23.)
-Windows.edb
+- Windows.edb
+> ‘System_DateModified’ column
+> ‘Microsoft_IE_TargetUrl’ column
+
+62 . List the e-mail communication stored in Windows Search database.
+(It should be considered only during a date range between 2015-03-23 and 2015-03-24.)
+- Windows.edb
 > ‘System_ItemPathDisplay’ column
 > ‘System_Message_FromName’ column
 > ‘System_Message_ToAddress’ column
@@ -2424,25 +2430,397 @@ Windows.edb
 > ‘System_Search_AutoSummary’ column
 > ‘System_Search_AutoSummary’ column
 
-62 . List the e-mail communication stored in Windows Search database.
 
-
-63 . (It should be considered only during a date range between 2015-03-23 and 2015-03-24.)
 64 . List files and directories related to Windows Desktop stored in Windows Search database.
-65 . (Windows Desktop directory: \Users\informant\Desktop\)
+(Windows Desktop directory: \Users\informant\Desktop\)
+
+- Windows.edb
+> ‘System_DateCreated’ column
+> ‘System_ItemDate’ column
+> ‘System_ItemPathDisplay’ column
+> ‘System_Search_AutoSummary’ column
+
+==================================================
+DocID             : 471
+System_Search_Rank: 707406378
+System_Search_GatherTime: 01 D0 66 39 64 03 2B 61
+System_Size       : 00 00 00 00 00 F9 F4 C3
+System_FileAttributes: 32
+System_DateModified: 01 D0 19 4A CD 2C 29 D2
+System_DateCreated: 01 D0 66 39 22 E3 14 FE
+System_DateAccessed: 01 D0 66 39 22 E3 14 FE
+System_Null       : 
+Microsoft_IE_TargetUrlPath: 
+System_Photo_GainControlText: 
+System_Contact_BusinessHomePage: 
+Microsoft_IE_Title: 
+System_IsIncomplete: 
+Microsoft_IE_VisitCount: 
+System_SDID       : 
+System_DRM_IsProtected: 
+System_Contact_SpouseName: 
+System_DateAcquired: 
+System_IsFolder   : 
+System_Message_BccAddress: 
+System_MIMEType   : 
+System_IsDeleted  : 
+System_Message_BccName: 
+System_Message_CcAddress: 
+System_Document_Contributor: 
+System_Search_HitCount: 
+System_Message_CcName: 
+System_Search_AccessCount: 8357316
+System_ItemFolderPathDisplay: C:\Users\informant\Desktop\S data\Secret Project Data\Secret Project Data\design
+System_Contact_EmailAddress2: 
+System_ItemPathDisplay: C:\Users\informant\Desktop\S data\Secret Project Data\Secret Project Data\design\[secret_project]_detailed_design.pptx
+System_Search_LastIndexedTotalTime: 
+System_Search_ReverseFileName: xtpp.ngised_deliated_]tcejorp_terces[`
+System_Communication_AccountName: 
+System_ItemUrl    : file:C:/Users/informant/Desktop/S data/Secret Project Data/Secret Project Data/design/[secret_project]_detailed_design.pptx
+System_IsRead     : 
+System_Importance : 
+System_ContentUrl : 
+System_Contact_JobTitle: 
+System_ItemParticipants: company
+System_FlagStatus : 
+System_Contact_OfficeLocation: 
+System_Message_FromAddress: 
+....
+
+==================================================
+DocID             : 473
+System_Search_Rank: 707406378
+System_Search_GatherTime: 01 D0 66 39 63 E6 9A DE
+System_Size       : 00 00 00 00 00 68 6F 86
+System_FileAttributes: 32
+System_DateModified: 01 D0 3C AC B1 9B 22 F3
+System_DateCreated: 01 D0 66 39 22 FD 44 21
+System_DateAccessed: 01 D0 66 39 22 FD 44 21
+System_Null       : 
+Microsoft_IE_TargetUrlPath: 
+System_Photo_GainControlText: 
+System_Contact_BusinessHomePage: 
+Microsoft_IE_Title: 
+System_IsIncomplete: 
+Microsoft_IE_VisitCount: 
+System_SDID       : 
+System_DRM_IsProtected: 
+System_Contact_SpouseName: 
+System_DateAcquired: 
+System_IsFolder   : 
+System_Message_BccAddress: 
+System_MIMEType   : 
+System_IsDeleted  : 
+System_Message_BccName: 
+System_Message_CcAddress: 
+System_Document_Contributor: 
+System_Search_HitCount: 
+System_Message_CcName: 
+System_Search_AccessCount: 8359420
+System_ItemFolderPathDisplay: C:\Users\informant\Desktop\S data\Secret Project Data\Secret Project Data\final
+System_Contact_EmailAddress2: 
+System_ItemPathDisplay: C:\Users\informant\Desktop\S data\Secret Project Data\Secret Project Data\final\[secret_project]_final_meeting.pptx
+System_Search_LastIndexedTotalTime: 
+System_Search_ReverseFileName: xtpp.gniteem_lanif_]tcejorp_terces[
+System_Communication_AccountName: 
+System_ItemUrl    : file:C:/Users/informant/Desktop/S data/Secret Project Data/Secret Project Data/final/[secret_project]_final_meeting.pptx
+System_IsRead     : 
+System_Importance : 
+System_ContentUrl : 
+System_Contact_JobTitle: 
+
+
+Windows FILETIME to unix, unix to date
+--------------------------------------------------------------------------------
+
+======================================================================
+#include <iostream>
+#include <stdlib.h>     /* atol */
+
+#define SEC_TO_UNIX_EPOCH 11644473600LL
+#define WINDOWS_TICK 10000000
+
+
+using namespace std;
+
+unsigned WindowsTickToUnixSeconds(long long windowsTicks)
+{
+     return (unsigned)(windowsTicks / WINDOWS_TICK - SEC_TO_UNIX_EPOCH);
+}
+
+int main(int argc, char* argv[]){
+
+    if (argc < 1) { cout << "Use " << argv[0] << "<FILETIME>" << endl; return -1; }
+
+    cout << WindowsTickToUnixSeconds(atol(argv[1])) << endl;
+    return 0;
+}
+======================================================================
+
+Tricks:
+[leviathan3773@latitude:TXTs ] $ echo $((16#01D0663922FD4421))
+130716784779936801
+
+[leviathan3773@latitude:TXTs ] $ ./test 130716784779936801 | awk '{ print strftime("%c",$0)}'
+mar 24 mar 2015 14:47:57 CET
+
+
+--------------------------------------------------------------------------------
+
 66 . Where are Volume Shadow Copies stored? When were they created?
+
+[leviathan3773@latitude:System Volume Information ] $ pwd
+/mnt/windows/hdd/System Volume Information
+[leviathan3773@latitude:System Volume Information ] $ ls -lath
+total 324M
+-rwxrwxrwx 1 root root 2,8M mar 25  2015 Syscache.hve
+-rwxrwxrwx 2 root root 256K mar 25  2015 Syscache.hve.LOG1
+drwxrwxrwx 1 root root  12K mar 25  2015 ..
+drwxrwxrwx 1 root root 4,0K mar 25  2015 .
+-rwxrwxrwx 2 root root 320M mar 25  2015 {9b365826-d2ef-11e4-b734-000c29ff2429}{3808876b-c176-4e48-b7ae-04046e6cc752}
+drwxrwxrwx 1 root root 4,0K mar 25  2015 SPP
+-rwxrwxrwx 2 root root  64K mar 25  2015 {3808876b-c176-4e48-b7ae-04046e6cc752}
+-rwxrwxrwx 1 root root  20K mar 25  2015 tracking.log
+-rwxrwxrwx 2 root root    0 mar 25  2015 Syscache.hve.LOG2
+-rwxrwxrwx 2 root root    0 mar 25  2015 MountPointManagerRemoteDatabase
+
+
+[leviathan3773@latitude:~ ] $ sudo vshadowinfo -o 105906176 Escritorio/cfreds/Resources/DDs/cfreds_2015_data_leakage_pc.dd 
+vshadowinfo 20160110
+
+Volume Shadow Snapshot information:
+  Number of stores: 1
+
+Store: 1
+  Identifier    : 9b365826-d2ef-11e4-b734-000c29ff2429
+  Shadow copy set ID  : 56e43eb5-ac18-4f06-a521-1e17712b7ced
+  Creation time   : Mar 25, 2015 14:57:27.293805500 UTC
+  Shadow copy ID    : 8f1a2a2d-ce6b-42a5-b92b-f13e65d9c2cb
+  Volume size   : 21367881728 bytes
+  Attribute flags   : 0x0042000d
+
+[leviathan3773@latitude:~ ] $ 
+
+[leviathan3773@latitude:~ ] $ sudo vshadowmount -o 105906176 Escritorio/cfreds/Resources/DDs/cfreds_2015_data_leakage_pc.dd /mnt/vssvolume/
+vshadowmount 20160110
+
+[leviathan3773@latitude:~ ] $ sudo ls -la /mnt/vssvolume 
+total 4
+dr-xr-xr-x 2 root root           0 sep 22 12:27 .
+drwxr-xr-x 4 root root        4096 sep 22 12:24 ..
+-r--r--r-- 1 root root 21367881728 ene  1  1970 vss1
+
+Now we mount the [VSS]:
+
+[leviathan3773@latitude:mnt ] $ sudo mount -o ro,noexec,nosuid,nodev /mnt/vssvolume/vss1 /mnt/vss1logical/
+[leviathan3773@latitude:mnt ] $ cd /mnt/vss1logical/
+[leviathan3773@latitude:vss1logical ] $ ls
+Documents and Settings  MSOCache      PerfLogs     Program Files        Recovery      System Volume Information  Windows
+hiberfil.sys            pagefile.sys  ProgramData  Program Files (x86)  $Recycle.Bin  Users
+[leviathan3773@latitude:vss1logical ] $ df -hT
+S.ficheros                   Tipo     Tamaño Usados  Disp Uso% Montado en
+udev                         devtmpfs   3,9G      0  3,9G   0% /dev
+tmpfs                        tmpfs      788M   9,5M  779M   2% /run
+/dev/sdb1                    ext4       103G    81G   17G  83% /
+tmpfs                        tmpfs      3,9G   560K  3,9G   1% /dev/shm
+tmpfs                        tmpfs      5,0M   4,0K  5,0M   1% /run/lock
+tmpfs                        tmpfs      3,9G      0  3,9G   0% /sys/fs/cgroup
+tmpfs                        tmpfs      788M    96K  788M   1% /run/user/1000
+/home/leviathan3773/.Private ecryptfs   103G    81G   17G  83% /home/leviathan3773
+/dev/mapper/loop0p2          fuseblk     20G    17G  3,4G  84% /mnt/windows/hdd
+/dev/mapper/loop1p1          vfat      1020M   224M  797M  22% /mnt/windows/rm2
+/dev/loop2                   udf        703M   703M     0 100% /media/leviathan3773/IAMAN CD
+/dev/sda2                    fuseblk    112G   106G  6,3G  95% /media/leviathan3773/E062E8AC62E8891C
+/dev/loop4                   fuseblk     20G    18G  2,8G  87% /mnt/vss1logical
+[leviathan3773@latitude:vss1logical ] $ 
+
+
 67 . Find traces related to Google Drive service in Volume Shadow Copy.
-68 . What are the differences between the current system image (of Question 29 ~ 31) and its VSC?
+What are the differences between the current system image (of Question 29 ~ 31) and its VSC?
+
+[leviathan3773@latitude:user_default ] $ pwd
+/mnt/vss1logical/Users/informant/AppData/Local/Google/Drive/user_default
+[leviathan3773@latitude:user_default ] $ ls -lat
+total 390
+-rwxrwxrwx 1 root root 349702 mar 23  2015 sync_log.log
+drwxrwxrwx 1 root root   4096 mar 23  2015 .
+-rwxrwxrwx 2 root root  11264 mar 23  2015 sync_config.db
+-rwxrwxrwx 1 root root  20480 mar 23  2015 snapshot.db
+drwxrwxrwx 1 root root      0 mar 23  2015 cloud_graph
+-rwxrwxrwx 2 root root    294 mar 23  2015 com.google.drive.nativeproxy.json
+-rwxrwxrwx 1 root root     46 mar 23  2015 run_dir
+drwxrwxrwx 1 root root   4096 mar 23  2015 ..
+-rwxrwxrwx 1 root root      4 mar 23  2015 pid
+-rwxrwxrwx 2 root root      0 mar 23  2015 lockfile
+-rwxrwxrwx 1 root root   3245 mar 23  2015 cacerts
+drwxrwxrwx 1 root root      0 mar 23  2015 CrashReports
+[leviathan3773@latitude:user_default ] $ 
+
+Differences:
+----------------------------------------------------------------------------------------
+snapshot.db:                       SQLite 3.x database
+sync_config.db:                    SQLite 3.x database
+sync_log.log:                      ASCII text, with very long lines, with CRLF line terminators
+----------------------------------------------------------------------------------------
+
 69 . What files were deleted from Google Drive?
+
+================================================================================================================================================
+[leviathan3773@latitude:user_default ] $ cat sync_log.log  | egrep "DELETE"
+
+...
+
+2015-03-23 16:42:17,026 -0400 INFO pid=2576 4004:LocalWatcher    common.aggregator:114 --------> Received event RawEvent(DELETE, path=u'\\\\?\\C:\\Users\\informant\\Google Drive\\do_u_wanna_build_a_snow_man.mp3', time=1427143336.964, ino=1125899906846942L, parent_ino=844424930207017L, affects_gdoc=False, is_cancelled=<RawEventIsCancelledFlag.FALSE: 0>, backup=<Backup.NO_BACKUP_CONTENT: (False, False)>) None
+2015-03-23 16:42:17,026 -0400 INFO pid=2576 4004:LocalWatcher    common.change_buffer:1017 Adding event to change buffer: RawEvent(DELETE, path=u'\\\\?\\C:\\Users\\informant\\Google Drive\\do_u_wanna_build_a_snow_man.mp3', time=1427143336.964, ino=1125899906846942L, parent_ino=844424930207017L, affects_gdoc=False, is_cancelled=<RawEventIsCancelledFlag.FALSE: 0>, backup=<Backup.NO_BACKUP_CONTENT: (False, False)>)
+2015-03-23 16:42:17,026 -0400 INFO pid=2576 4004:LocalWatcher    common.aggregator:114 --------> Received event RawEvent(DELETE, path=u'\\\\?\\C:\\Users\\informant\\Google Drive\\happy_holiday.jpg', time=1427143336.964, ino=4503599627374809L, parent_ino=844424930207017L, affects_gdoc=False, is_cancelled=<RawEventIsCancelledFlag.FALSE: 0>, backup=<Backup.NO_BACKUP_CONTENT: (False, False)>) None
+2015-03-23 16:42:17,026 -0400 INFO pid=2576 4004:LocalWatcher    common.change_buffer:1017 Adding event to change buffer: RawEvent(DELETE, path=u'\\\\?\\C:\\Users\\informant\\Google Drive\\happy_holiday.jpg', time=1427143336.964, ino=4503599627374809L, parent_ino=844424930207017L, affects_gdoc=False, is_cancelled=<RawEventIsCancelledFlag.FALSE: 0>, backup=<Backup.NO_BACKUP_CONTENT: (False, False)>)
+2015-03-23 16:42:19,369 -0400 INFO pid=2576 3568:Worker-0        common.workers:188 Worker starting on [ImmutableChange(Direction.UPLOAD, Action.DELETE, ino=1125899906846942, path=u'\\\\?\\C:\\Users\\informant\\Google Drive', name=u'do_u_wanna_build_a_snow_man.mp3', parent_ino=844424930207017, affects_gdoc=False, backup=Backup.NO_BACKUP_CONTENT, is_cancelled=False, is_priority=False, hash=-1363400622, _constructor_called=True)]
+2015-03-23 16:42:19,385 -0400 INFO pid=2576 2820:Worker-1        common.workers:188 Worker starting on [ImmutableChange(Direction.UPLOAD, Action.DELETE, ino=4503599627374809, path=u'\\\\?\\C:\\Users\\informant\\Google Drive', name=u'happy_holiday.jpg', parent_ino=844424930207017, affects_gdoc=False, backup=Backup.NO_BACKUP_CONTENT, is_cancelled=False, is_priority=False, hash=481398202, _constructor_called=True)]
+2015-03-23 16:42:20,072 -0400 INFO pid=2576 2820:Worker-1        common.workers:199 Worker successfully completed [ImmutableChange(Direction.UPLOAD, Action.DELETE, ino=4503599627374809, path=u'\\\\?\\C:\\Users\\informant\\Google Drive', name=u'happy_holiday.jpg', parent_ino=844424930207017, affects_gdoc=False, backup=Backup.NO_BACKUP_CONTENT, is_cancelled=False, is_priority=False, hash=481398202, _constructor_called=True)]
+2015-03-23 16:42:20,072 -0400 INFO pid=2576 2820:Worker-1        common.change_buffer:276 Removing entry from change buffer: ChangeBufferEntry(state=IN_PROGRESS, fschange=ImmutableChange(Direction.UPLOAD, Action.DELETE, ino=4503599627374809, path=u'\\\\?\\C:\\Users\\informant\\Google Drive', name=u'happy_holiday.jpg', parent_ino=844424930207017, affects_gdoc=False, backup=Backup.NO_BACKUP_CONTENT, is_cancelled=False, is_priority=False, hash=481398202, _constructor_called=True), raw_event=ImmutableRawEvent(op=DELETE, path=\\?\C:\Users\informant\Google Drive\happy_holiday.jpg, time=1427143336.96, is_dir=None, ino=4503599627374809, size=None, old_path=None, new_ino=None, mtime=None, parent_ino=844424930207017, affects_gdoc=False, is_cancelled=RawEventIsCancelledFlag.FALSE, old_parent_ino=None, backup=Backup.NO_BACKUP_CONTENT, _hash_code=1349549055), sequence_number=7)
+2015-03-23 16:42:22,709 -0400 INFO pid=2576 3568:Worker-0        common.workers:199 Worker successfully completed [ImmutableChange(Direction.UPLOAD, Action.DELETE, ino=1125899906846942, path=u'\\\\?\\C:\\Users\\informant\\Google Drive', name=u'do_u_wanna_build_a_snow_man.mp3', parent_ino=844424930207017, affects_gdoc=False, backup=Backup.NO_BACKUP_CONTENT, is_cancelled=False, is_priority=False, hash=-1363400622, _constructor_called=True)]
+2015-03-23 16:42:22,709 -0400 INFO pid=2576 3568:Worker-0        common.change_buffer:276 Removing entry from change buffer: ChangeBufferEntry(state=IN_PROGRESS, fschange=ImmutableChange(Direction.UPLOAD, Action.DELETE, ino=1125899906846942, path=u'\\\\?\\C:\\Users\\informant\\Google Drive', name=u'do_u_wanna_build_a_snow_man.mp3', parent_ino=844424930207017, affects_gdoc=False, backup=Backup.NO_BACKUP_CONTENT, is_cancelled=False, is_priority=False, hash=-1363400622, _constructor_called=True), raw_event=ImmutableRawEvent(op=DELETE, path=\\?\C:\Users\informant\Google Drive\do_u_wanna_build_a_snow_man.mp3, time=1427143336.96, is_dir=None, ino=1125899906846942, size=None, old_path=None, new_ino=None, mtime=None, parent_ino=844424930207017, affects_gdoc=False, is_cancelled=RawEventIsCancelledFlag.FALSE, old_parent_ino=None, backup=Backup.NO_BACKUP_CONTENT, _hash_code=279886661), sequence_number=6)
+2015-03-23 16:42:23,411 -0400 INFO pid=2576 3496:Batcher         common.batcher:846 Batcher Stats = file_count = Counter({_COUNT_KEY(direction=_UploadDirectionType(Direction.UPLOAD), action=_FSChangeActionType(Action.DELETE), batch=False, successful=True): 2}), byte_count = Counter(), batch_operation_count = Counter(), process_seconds = Counter({_COUNT_KEY(direction=_UploadDirectionType(Direction.UPLOAD), action=_FSChangeActionType(Action.DELETE), batch=False, successful=True): 4.025000333786011}), duration seconds = 4 (start_time = 1427143339, end_time = 1427143343)
+[leviathan3773@latitude:user_default ] $ 
+================================================================================================================================================
+
+[leviathan3773@latitude:user_default ] $ awk -F"," '/DELETE/ { print $5,$6 }' sync_log.log 
+ ...
+ 
+ path=u'\\\\?\\C:\\Users\\informant\\Google Drive'  name=u'do_u_wanna_build_a_snow_man.mp3'
+ path=u'\\\\?\\C:\\Users\\informant\\Google Drive'  name=u'happy_holiday.jpg'
+ path=u'\\\\?\\C:\\Users\\informant\\Google Drive'  name=u'happy_holiday.jpg'
+ ...
+ path=u'\\\\?\\C:\\Users\\informant\\Google Drive'  name=u'do_u_wanna_build_a_snow_man.mp3'
+ 
+[leviathan3773@latitude:user_default ] $ 
+
+
 70 . Find deleted records of cloud_entry table inside snapshot.db from VSC.
-71 . (Just examine the SQLite database only. Let us suppose that a text based log file was wiped.)
-72 . [Hint: DDL of cloud_entry table is as follows.]
-73 . CREATE TABLE cloud_entry
-74 . (doc_id TEXT, filename TEXT, modified INTEGER, created INTEGER, acl_role INTEGER,
-75 . doc_type INTEGER, removed INTEGER, size INTEGER, checksum TEXT, shared INTEGER,
-76 . resource_type TEXT, PRIMARY KEY (doc_id));
+(Just examine the SQLite database only. Let us suppose that a text based log file was wiped.)
+[Hint: DDL of cloud_entry table is as follows.]
+CREATE TABLE cloud_entry
+(doc_id TEXT, filename TEXT, modified INTEGER, created INTEGER, acl_role INTEGER,
+doc_type INTEGER, removed INTEGER, size INTEGER, checksum TEXT, shared INTEGER,
+resource_type TEXT, PRIMARY KEY (doc_id));
+
+http://www.sqlite.org/fileformat2.htm
+
 77 . Why can’t we find Outlook’s e-mail data in Volume Shadow Copy?
+
+Because were excluded by the following snapshot configuration
+
+
+============================================================================================================================================
+[leviathan3773@latitude:user_default ] $ strings snapshot.db 
+SQLite format 3
+/indexcloud_relations_parent_doc_id_idxcloud_relations
+CREATE INDEX cloud_relations_parent_doc_id_idx on cloud_relations (parent_doc_id)
+Otablecloud_relationscloud_relations
+CREATE TABLE cloud_relations (child_doc_id TEXT, parent_doc_id TEXT, UNIQUE (child_doc_id, parent_doc_id), FOREIGN KEY (child_doc_id) REFERENCES cloud_entry(doc_id), FOREIGN KEY (parent_doc_id) REFERENCES cloud_entry(doc_id))=
+indexsqlite_autoindex_cloud_relations_1cloud_relations
+Utablecloud_entrycloud_entry
+CREATE TABLE cloud_entry (doc_id TEXT, filename TEXT, modified INTEGER, created INTEGER, acl_role INTEGER, doc_type INTEGER, removed INTEGER, size INTEGER, checksum TEXT, shared INTEGER, resource_type TEXT, PRIMARY KEY (doc_id))5
+indexsqlite_autoindex_cloud_entry_1cloud_
+0Bz0ye6gXtiZaVl8yVU5mWHlGbWcdo_u_wanna_build_a_snow_man.mp3T
+xmho
+2c4553f99533d85adb104b3a5c38521afile
+0Bz0ye6gXtiZaakx6d3R3c0JmM1Uhappy_holiday.jpgT
+0c77d6a2704155dbfdf29817769b7478file
+rootrootfolder
+0Bz0ye6gXtiZaVl8yVU5mWHlGbWc
+!0Bz0ye6gXtiZaakx6d3R3c0JmM1U
+  root
+0Bz0ye6gXtiZaVl8yVU5mWHlGbWcroot
+0Bz0ye6gXtiZaakx6d3R3c0JmM1Uroot
+0Bz0ye6gXtiZaVl8yVU5mWHlGbWcroot
+% 0Bz0ye6gXtiZaakx6d3R3c0JmM1Uroot
+root
+root
+0Bz0ye6gXtiZaVl8yVU5mWHlGbWc
+ 0Bz0ye6gXtiZaakx6d3R3c0JmM1U
+Utablecloud_entrycloud_entry
+CREATE TABLE cloud_entry (doc_id TEXT, filename TEXT, modified INTEGER, created INTEGER, acl_role INTEGE
+Utablecloud_entrycloud_entry
+CREATE TABLE cloud_entry (doc_id TEXT, filename TEXT, modified INTEGER, created INTEGER, acl_role INTEGER, doc_type INTEGER, removed INTEGER, size INTEGER, checksum TEXT, shared INTEGER, resource_type TEXT, PRIMARY KEY (doc_id))5
+indexsqlite_autoindex_cloud_entry_1cloud_entry
+Otablecloud_relationscloud_relations
+CREATE TABLE cloud_relations (child_doc_id TEXT, parent_doc_id TEXT, UNIQUE (child_doc_id, parent_doc_id), FOREIGN KEY (child_doc_id) REFERENCES cloud_entry(doc_id), FOREIGN KEY (parent_doc_id) REFERENCES cloud_entry(doc_id))=
+indexsqlite_autoindex_cloud_relations_1cloud_relations
+/indexcloud_relations_parent_doc_id_idxcloud_relations
+CREATE INDEX cloud_relations_parent_doc_id_idx on cloud_relations (parent_doc_id)
+do_u_wanna_build_a_snow_man.mp3A
+#T(2c4553f99533d85adb104b3a5c38521aho
+happy_holiday.jpgA
+0c77d6a2704155dbfdf29817769b7478
+\\?\C:\Users\informant\Google Drive
+tablemappingmapping
+CREATE TABLE mapping (inode_number INTEGER, doc_id TEXT, UNIQUE (inode_number), FOREIGN KEY (inode_number) REFERENCES local_entry(inode_number), FOREIGN KEY (doc_id) REFERENCES cloud_entry(doc_id))-
+indexsqlite_autoindex_mapping_1mapping
+tablelocal_
++indexcloud_relations_child_doc_id_idxcloud_relations
+CREATE INDEX cloud_relations_child_doc_id_idx on cloud_relations (child_doc_id)
+tablelocal_entrylocal_entry CREATE TABLE local_entry (inode_number INTEGER, filename TEXT, modified INTEGER, checksum TEXT, size INTEGER, PRIMARY KEY (inode_number))
+tablelocal_relationslocal_relations
+CREATE TABLE local_relations (child_inode_number INTEGER, parent_inode_number INTEGER, UNIQUE (child_inode_number), FOREIGN KEY (parent_inode_number) REFERENCES local_entry(inode_number), FOREIGN KEY (child_inode_number) REFERENCES local_entry(inode_number))= 
+indexsqlite_autoindex_local_relations_1local_relations
+0Bz0ye6gXtiZaVl8yVU5mWHlGbWc
+0Bz0ye6gXtiZaakx6d3R3c0JmM1U
+%)root
+0Bz0ye6gXtiZaVl8yVU5mWHlGbWc
+!0Bz0ye6gXtiZaakx6d3R3c0JmM1U
+  root
+3tableoverlay_statusoverlay_status
+CREATE TABLE overlay_status (path TEXT, overlay_status INTEGER, PRIMARY KEY (path));
+indexsqlite_autoindex_overlay_status_1overlay_status
+indexmapping_inode_number_idxmapping
+CREATE INDEX mapping_inode_number_idx on mapping (inode_number)
+Gindexlocal_relations_parent_inode_number_idxlocal_relations
+CREATE INDEX local_relations_parent_inode_number_idx on local_relations (parent_inode_number)
+tablemappingmapping
+CREATE TABLE mapping (inode_number INTEGER, doc_id TEXT, UNIQUE (inode_number), FOREIGN KEY (inode_number) REFERENCES local_entry(inode_number), FOREIGN KEY (doc_id) REFERENCES cloud_entry(doc_id))-
+indexsqlite_autoindex_mapping_1mapping
+sindexmapping_doc_id_idxmapping
+CREATE INDEX mapping_doc_id_idx on mapping (doc_id)
+\\?\C:\Users\informant\Google Drive\happy_holiday.jpg
+  \\?\C:\Users\informant\Google Drive\do_u_wanna_build_a_snow_man.mp3
+w \\?\C:\Users\informant\Google Drive\happy_holiday.jpgG
+  \\?\C:\Users\informant\Google Drive\do_u_wanna_build_a_snow_man.mp3
+============================================================================================================================================
+
+Database format (Bytes):
+  [http://www.sqlite.org/fileformat2.html]
+
+With this forensic tool [https://github.com/mdegrazia/SQLite-Deleted-Records-Parser]:
+
+Use:
+$> sudo python sqlparse_v1.3.py  -f /mnt/vss1logical/Users/informant/AppData/Local/Google/Drive/user_default/snapshot.db -o report.tsv
+
+
+Epic fail to read Windoze registers (mount readonly):
+
+[leviathan3773@latitude:config ] $ chntpw -e SYSTEM
+chntpw version 1.00 140201, (c) Petter N Hagen
+openHive(SYSTEM) failed: Read-only file system, trying read-only
+openHive(): read error: : Read-only file system
+chntpw: Unable to open/read a hive, exiting..
+[leviathan3773@latitude:config ] $ 
+
+Try...
+
+[leviathan3773@latitude:~ ] $ sudo mount -o nodev,noexec,nosuid /mnt/vssvolume/vss1 /mnt/vss1logical/
+
+ntfs-3g-mount: mount failed: Permiso denegado
+[leviathan3773@latitude:~ ] $ sudo mount -o ro,nodev,noexec,nosuid /mnt/vssvolume/vss1 /mnt/vss1logical/
+
+Solution??
+
 78 . Examine ‘Recycle Bin’ data in PC.
+
+The SID of ‘informant’ account is 1000.
+
+
+
 79 . What actions were performed for anti-forensics on PC at the last day '2015-03-25'?
 80 . Recover deleted files from USB drive ‘RM#2’.
 81 . What actions were performed for anti-forensics on USB drive ‘RM#2’?
