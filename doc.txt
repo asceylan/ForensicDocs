@@ -479,3 +479,167 @@ execution, such as interactively browsing a directory. These entries can be
 easily spotted by observing if the Process Execution Flag is marked as FALSE. 
 Below is an example of entries from a Windows Server 2012 Shimcache. Notice the 
 two entries which were not executed.
+-------------------------------------------------------------------------------
+
+URL [http://forensicsblog.org/tag/mounting-shadow-copies/]
+URL [http://epyxforensics.com/]
+URL [https://msdn.microsoft.com/en-us/library/windows/desktop/aa384612(v=vs.85).aspx]
+Más herramientas utilizadas [sleuthkit]:
+
+$>  sudo apt-get install sleuthkit
+
+Además de [libvshadow]:
+
+----------------------------------------------------------------------------------------
+libvshadow by Joachim Metz is an excellent tool for conducting a deeper analysis 
+of shadow copies. We’ll set up the tool’s requirements and set it up from its latest 
+source below.
+----------------------------------------------------------------------------------------
+
+Instalamos las dependencias:
+
+$> sudo apt install libfuse-dev --> NECESARIO?¿
+$> sudo apt install libvshadow-utils
+
+Para saber el offset:
+
+[leviathan3773@latitude:System Volume Information ] $ mmls ~/Escritorio/cfreds/Resources/DDs/cfreds_2015_data_leakage_pc.dd 
+DOS Partition Table
+Offset Sector: 0
+Units are in 512-byte sectors
+
+      Slot      Start        End          Length       Description
+000:  Meta      0000000000   0000000000   0000000001   Primary Table (#0)
+001:  -------   0000000000   0000002047   0000002048   Unallocated
+002:  000:000   0000002048   0000206847   0000204800   NTFS / exFAT (0x07)
+003:  000:001   0000206848   0041940991   0041734144   NTFS / exFAT (0x07)
+004:  -------   0041940992   0041943039   0000002048   Unallocated
+[leviathan3773@latitude:System Volume Information ] $ 
+
+Ahora hay que multiplicar el punto de inicio, en este caso [206848] por 512 (105906176)
+
+[sudo mount -t ntfs -o ro,offset=65536 shadows.dd /mnt/evidence]
+
+Utlización:
+
+$> vshadowinfo -o [offset] [image]
+
+Ejemplo:
+
+URL [http://epyxforensics.com/mounting-shadow-volumes-in-linux-ubuntu-12-04/]
+
+[leviathan3773@latitude:~ ] $ sudo vshadowinfo -o 105906176 Escritorio/cfreds/Resources/DDs/cfreds_2015_data_leakage_pc.dd 
+vshadowinfo 20160110
+
+Volume Shadow Snapshot information:
+  Number of stores: 1
+
+Store: 1
+  Identifier    : 9b365826-d2ef-11e4-b734-000c29ff2429
+  Shadow copy set ID  : 56e43eb5-ac18-4f06-a521-1e17712b7ced
+  Creation time   : Mar 25, 2015 14:57:27.293805500 UTC
+  Shadow copy ID    : 8f1a2a2d-ce6b-42a5-b92b-f13e65d9c2cb
+  Volume size   : 21367881728 bytes
+  Attribute flags   : 0x0042000d
+
+
+Para montarlo correctamente:
+
+[leviathan3773@latitude:~ ] $ sudo vshadowmount -o 105906176 Escritorio/cfreds/Resources/DDs/cfreds_2015_data_leakage_pc.dd /mnt/vssvolume/
+vshadowmount 20160110
+
+
+Como podemos observar:
+
+[leviathan3773@latitude:~ ] $ sudo ls -la /mnt/vssvolume 
+total 4
+dr-xr-xr-x 2 root root           0 sep 22 12:27 .
+drwxr-xr-x 4 root root        4096 sep 22 12:24 ..
+-r--r--r-- 1 root root 21367881728 ene  1  1970 vss1
+[leviathan3773@latitude:~ ] $ 
+
+Puede haber algunos problemas:
+
+[leviathan3773@latitude:mnt ] $ ls -lat
+ls: no se puede acceder a 'vssvolume': Permiso denegado
+total 12
+drwxr-xr-x  4 root root 4096 sep 22 12:24 .
+drwxr-xr-x 24 root root 4096 sep 21 09:43 ..
+drwxr-xr-x  6 root root 4096 sep 12 14:45 windows
+d?????????  ? ?    ?       ?            ? vssvolume
+[leviathan3773@latitude:mnt ] $ ls -lat vssvolume 
+ls: no se puede acceder a 'vssvolume': Permiso denegado
+[leviathan3773@latitude:mnt ] $ sudo ls -lat vssvolume 
+total 4
+dr-xr-xr-x 2 root root           0 sep 22 12:27 .
+drwxr-xr-x 4 root root        4096 sep 22 12:24 ..
+-r--r--r-- 1 root root 21367881728 ene  1  1970 vss1
+[leviathan3773@latitude:mnt ] $ 
+
+
+Solución
+---------------------------------------------------------------------------
+From here you can image, carve and/or use the sleuthkit against the vss1 
+shadow volume.  To access the directory structure of the shadow volume we 
+need to mount it using the mount command.  But before we do that, we need 
+to designate a location where we can temporarily mount the shadow volume 
+as a file system.  To keep things simple, let’s create a directory called 
+vss1logical in the root of the mnt folder.  Type the below command into the 
+terminal and press enter.  Type your root password (if needed).
+
+sudo mkdir /mnt/vss1logical
+
+To mount that shadow volume as a file system, type the following into the terminal.
+
+sudo mount -o ro /mnt/vssvolume/vss1 /mnt/vss1logical/
+
+Mount is the command to mount a file system.  The -o flag specifies the 
+options for mounting.  In this instance we opted to mount it as a “ro” 
+read-only file system.  /Mnt/vssvolume/vss1 is the shadow volume, and 
+/mnt/vss1logical/ is the mount point.  Press enter, and type your root password (if needed).
+
+Your shadow volume is now mounted as a file system under /mnt/vss1logical/.  
+Change directory (cd) into the vss1logical directory and run ls -l.
+---------------------------------------------------------------------------
+
+[leviathan3773@latitude:mnt ] $ sudo mount -o ro,noexec,nosuid,nodev /mnt/vssvolume/vss1 /mnt/vss1logical/
+[leviathan3773@latitude:mnt ] $ cd /mnt/vss1logical/
+[leviathan3773@latitude:vss1logical ] $ ls
+Documents and Settings  MSOCache      PerfLogs     Program Files        Recovery      System Volume Information  Windows
+hiberfil.sys            pagefile.sys  ProgramData  Program Files (x86)  $Recycle.Bin  Users
+[leviathan3773@latitude:vss1logical ] $ df -hT
+S.ficheros                   Tipo     Tamaño Usados  Disp Uso% Montado en
+udev                         devtmpfs   3,9G      0  3,9G   0% /dev
+tmpfs                        tmpfs      788M   9,5M  779M   2% /run
+/dev/sdb1                    ext4       103G    81G   17G  83% /
+tmpfs                        tmpfs      3,9G   560K  3,9G   1% /dev/shm
+tmpfs                        tmpfs      5,0M   4,0K  5,0M   1% /run/lock
+tmpfs                        tmpfs      3,9G      0  3,9G   0% /sys/fs/cgroup
+tmpfs                        tmpfs      788M    96K  788M   1% /run/user/1000
+/home/leviathan3773/.Private ecryptfs   103G    81G   17G  83% /home/leviathan3773
+/dev/mapper/loop0p2          fuseblk     20G    17G  3,4G  84% /mnt/windows/hdd
+/dev/mapper/loop1p1          vfat      1020M   224M  797M  22% /mnt/windows/rm2
+/dev/loop2                   udf        703M   703M     0 100% /media/leviathan3773/IAMAN CD
+/dev/sda2                    fuseblk    112G   106G  6,3G  95% /media/leviathan3773/E062E8AC62E8891C
+/dev/loop4                   fuseblk     20G    18G  2,8G  87% /mnt/vss1logical
+[leviathan3773@latitude:vss1logical ] $ 
+
+Una herramienta para ver archivos que han sido eliminador de [SQLite] sería: 
+  · [https://github.com/mdegrazia/SQLite-Deleted-Records-Parser]
+
+Su uso sería el siguiente:
+
+$> sudo python sqlparse_v1.3.py  -f /mnt/vss1logical/Users/informant/AppData/Local/Google
+   /Drive/user_default/snapshot.db -o report.tsv
+
+Type        Offset  Length  Data
+Unallocated 1034    986     v EK M 0Bz0ye6gXtiZaVl8yVU5mWHlGbWcdo_u_wanna_build_a_snow_man.mp3TUxmho2c4553f99533d85adb104b3a5c38521afilej/ M 0Bz0ye6gXtiZaakx6d3R3c0JmM1Uhappy_holiday.jpgTUxj0c77d6a2704155dbfdf29817769b7478file
+Unallocated 3080  1016  #E0Bz0ye6gXtiZaVl8yVU5mWHlGbWcroot%0Bz0ye6gXtiZaakx6d3R3c0JmM1Uroot
+Unallocated 7186  206 rN##Utablecloud_entrycloud_entryCREATE TABLE cloud_entry (doc_id TEXT, filename TEXT, modified INTEGER, created INTEGER, acl_role INTEGE
+Unallocated 8202  964 *P^KMdo_u_wanna_build_a_snow_man.mp3A2#T(2c4553f99533d85adb104b3a5c38521ahoKY/Mhappy_holiday.jpgA2`0c77d6a2704155dbfdf29817769b7478
+Unallocated 9232  324 ) ` tablemappingmappingCREATE TABLE mapping (inode_number INTEGER, doc_id TEXT, UNIQUE (inode_number), FOREIGN KEY (inode_number) REFERENCES local_entry(inode_number), FOREIGN KEY (doc_id) REFERENCES cloud_entry(doc_id))- Aindexsqlite_autoindex_mapping_1mapping,##tablelocal_
+Unallocated 10248 1016  %)%)
+Unallocated 13322 997 'E0Bz0ye6gXtiZaVl8yVU5mWHlGbWc)E0Bz0ye6gXtiZaakx6d3R3c0JmM1U
+Unallocated 19464 1016  }8w \\?\C:\Users\informant\Google Drive\happy_holiday.jpgG \\?\C:\Users\informant\Google Drive\do_u_wanna_build_a_snow_man.mp3
+
+
