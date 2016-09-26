@@ -2819,16 +2819,121 @@ Solution??
 
 The SID of ‘informant’ account is 1000.
 
+[.dll] files:
+
+biblioteca de vínculos dinámicos (DLL). 
+...............................................................................
+El uso de archivos DLL ayuda a promover el diseño modular de código, la 
+reutilización de código, uso eficaz de la memoria y espacio en disco reducido. 
+Por lo tanto, el sistema operativo y los programas se cargan más rápido, se 
+ejecutan más rápidamente y tienen menos espacio en disco en el equipo.
+
+Cuando un programa utiliza un archivo DLL, un problema que se denomina 
+dependencia puede provocar que el programa no se ejecute. Cuando un 
+programa utiliza un archivo DLL, se crea una dependencia. Si otro programa 
+sobrescribe y rompe esta dependencia, entonces no es posible ejecutar 
+correctamente el programa original.
+
+Con la introducción de la de Microsoft.NET Framework, se han eliminado 
+la mayoría de los problemas de dependencia mediante el uso de ensamblados.
+...............................................................................
+
+Foremost started at Thu Sep 22 14:23:34 2016
+Invocation: foremost -t all -i /dev/loop4 -o /home/leviathan3773/Escritorio/cfreds/RecycleBinSnapshot/ 
+Output directory: /home/leviathan3773/Escritorio/cfreds/RecycleBinSnapshot
+Configuration file: /etc/foremost.conf
+------------------------------------------------------------------
+
+File: /dev/loop4
+Start: Thu Sep 22 14:23:34 2016
+Length: 19 GB (21367881728 bytes)
+ 
+Num  Name (bs=512)         Size  File Offset   Comment 
+[leviathan3773@latitude:RecycleBinSnapshot ] $ cat audit.txt | awk '$6 ~ /2015/ && $2 !~ /.dll/ { print $0 }'
+11400:  02911312.exe        99 KB    1490591744    01/22/2015 01:07:56
+11407:  02986960.exe       784 KB    1529323520    03/14/2015 08:41:26
+11408:  03022480.exe         1 MB    1547509760    03/14/2015 07:40:46
+13935:  03509648.exe       781 KB    1796939776    02/20/2015 00:51:50
+13938:  03518144.exe        44 KB    1801289728    01/22/2015 01:21:27
+13954:  03567712.exe       844 KB    1826668544    01/22/2015 01:07:44
+13955:  03579000.exe        44 KB    1832448000    01/22/2015 01:17:55
+13957:  03649824.exe        44 KB    1868709888    01/22/2015 01:17:52
+17801:  05779072.exe       844 KB    2958884864    01/22/2015 01:07:44
+20363:  06968829.exe       220 KB    3568040448    01/22/2015 01:11:17
+20422:  07088224.exe       844 KB    3629170688    01/22/2015 01:07:44
+21165:  07623456.exe       216 KB    3903209472    02/20/2015 01:59:49
+21174:  07728128.exe         1 MB    3956801536    03/14/2015 07:40:46
+21175:  07732664.exe       458 KB    3959123968    02/20/2015 01:35:47
+21294:  08131208.exe       113 KB    4163178496    02/20/2015 01:56:54
+24418:  09522576.exe        69 KB    4875558912    02/19/2015 22:18:57
+25327:  11324432.exe        99 KB    5798109184    01/22/2015 01:07:56
+33371:  14572216.exe       640 KB    7460974592    03/14/2015 08:10:44
+36408:  17019728.exe       220 KB    8714100736    01/22/2015 01:11:17
+53240:  24644480.exe         4 KB    12617973760   01/22/2015 01:07:22
+58427:  27236143.exe        11 KB    13944905216   02/19/2015 22:21:37
+58480:  27353675.exe         1 MB    14005082027   01/12/2015 18:55:49
+59733:  27975587.exe         1 MB    14323500971   01/12/2015 18:55:49
+65385:  28776167.exe        11 KB    14733397504   02/19/2015 22:21:37
+65387:  28850751.exe        11 KB    14771584512   02/19/2015 22:21:37
+65449:  29673760.exe       784 KB    15192965319   03/14/2015 08:41:26
+65450:  29675341.exe       640 KB    15193774607   03/14/2015 08:10:44
 
 
 79 . What actions were performed for anti-forensics on PC at the last day '2015-03-25'?
+Read this document and list all evinces...
+
 80 . Recover deleted files from USB drive ‘RM#2’.
+
+See [/home/leviathan3773/Escritorio/cfreds/recoveryPhotorec/rm2] and 
+(more results) [/home/leviathan3773/Escritorio/cfreds/recoveryForemost/rm2/test2]
+
+
+
 81 . What actions were performed for anti-forensics on USB drive ‘RM#2’?
-82 . [Hint: this can be inferred from the results of Question 53.]
+[Hint: this can be inferred from the results of Question 53.]
+
+Quick format for deleting data...
+
 83 . What files were copied from PC to USB drive ‘RM#2’?
+- Inference from the results of deleted data recovery in Question 53.
+- Inference from the results of traversed files/directories in Question 25 and 26.
+
 84 . Recover hidden files from the CD-R ‘RM#3’.
-85 . How to determine proper filenames of the original files prior to renaming tasks?
+
+See [/home/leviathan3773/Escritorio/cfreds/recoveryForemost/IAMAN_CD1]
+
+How to determine proper filenames of the original files prior to renaming tasks?
+
+- Metadata based data recovery
+> If this task is possible, it may be good for analyst.
+> With this method, we may be able to identify renamed filenames.
+> So, additional process is needed for determining original filenames.
+
+[leviathan3773@latitude:docx ] $ exiftool *.docx | awk '/========/ {print $0} 
+> /Title\s/ { print "Title", $3 } /Create Date/ { print "Create Date: " $4,$5 } 
+/^Modify Date/ { print "Modify Date:"$4,$5}'
+
 86 . What actions were performed for anti-forensics on CD-R ‘RM#3’?
+
+View all document and extract it.
+
+(1) Formatting CD-R (Burning Type 1: Like a USB flash drive)
+(2) Copying confidential files and some meaningless files to CD-R
+(3) Deleting confidential files from CD-R for hiding them
+
 87 . Create a detailed timeline of data leakage processes.
+- Behavior of the suspect
+> 2015-03-22: Normal business works (installation and configuration of apps)
+> 2015-03-23: Transferring sample confidential data through the internet
+> 2015-03-24: Copying confidential data to storage devices
+> 2015-03-25: Trying to do anti-forensics and take storage devices out
+
+View this document and extract it.
+
 88 . List and explain methodologies of data leakage performed by the suspect.
+
+View this document and extract it.
+
 89 . Create a visual diagram for a summary of results.
+
+View this document and extract it.
