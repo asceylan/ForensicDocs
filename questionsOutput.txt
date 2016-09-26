@@ -1,25 +1,23 @@
 
 1 . What are the hash values (MD5 & SHA-1) of all images?
 
-    [leviathan3773@latitude:DDs ] $ md5sum cfreds_2015_data_leakage_pc.dd && sha1sum cfreds_2015_data_leakage_pc.dd 
-    a49d1254c873808c58e6f1bcd60b5bde  cfreds_2015_data_leakage_pc.dd
-    afe5c9ab487bd47a8a9856b1371c2384d44fd785  cfreds_2015_data_leakage_pc.dd
-    [leviathan3773@latitude:DDs ] $ 
+[leviathan3773@latitude:DDs ] $ md5sum cfreds_2015_data_leakage_pc.dd && sha1sum cfreds_2015_data_leakage_pc.dd 
+a49d1254c873808c58e6f1bcd60b5bde  cfreds_2015_data_leakage_pc.dd
+afe5c9ab487bd47a8a9856b1371c2384d44fd785  cfreds_2015_data_leakage_pc.dd
+[leviathan3773@latitude:DDs ] $ 
 
-    [leviathan3773@latitude:DDs ] $ md5sum cfreds_2015_data_leakage_rm#2.dd && sha1sum cfreds_2015_data_leakage_rm#2.dd 
-    b4644902acab4583a1d0f9f1a08faa77  cfreds_2015_data_leakage_rm#2.dd
-    048961a85ca3eced8cc73f1517442d31d4dca0a3  cfreds_2015_data_leakage_rm#2.dd
-    [leviathan3773@latitude:DDs ] $ 
+[leviathan3773@latitude:DDs ] $ md5sum cfreds_2015_data_leakage_rm#2.dd && sha1sum cfreds_2015_data_leakage_rm#2.dd 
+b4644902acab4583a1d0f9f1a08faa77  cfreds_2015_data_leakage_rm#2.dd
+048961a85ca3eced8cc73f1517442d31d4dca0a3  cfreds_2015_data_leakage_rm#2.dd
+[leviathan3773@latitude:DDs ] $ 
 
-    [Faltan rm#3_type1 y rm#3_type3]
+[leviathan3773@latitude:DDs ] $ md5sum cfreds_2015_data_leakage_rm#3_type2.dd && sha1sum cfreds_2015_data_leakage_rm#3_type2.dd 
+858c7250183a44dd83eb706f3f178990  cfreds_2015_data_leakage_rm#3_type2.dd
+471d3eedca9add872fc0708297284e1960ff44f8  cfreds_2015_data_leakage_rm#3_type2.dd
+[leviathan3773@latitude:DDs ] $ 
 
-
-    [leviathan3773@latitude:DDs ] $ md5sum cfreds_2015_data_leakage_rm#3_type2.dd && sha1sum cfreds_2015_data_leakage_rm#3_type2.dd 
-    858c7250183a44dd83eb706f3f178990  cfreds_2015_data_leakage_rm#3_type2.dd
-    471d3eedca9add872fc0708297284e1960ff44f8  cfreds_2015_data_leakage_rm#3_type2.dd
-    [leviathan3773@latitude:DDs ] $ 
-
-2 . Does the acquisition and verification hash value match? No
+2 . Does the acquisition and verification hash value match? 
+No
 
 3 . Identify the partition information of PC image.
 
