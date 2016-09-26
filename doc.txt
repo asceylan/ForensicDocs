@@ -1,6 +1,7 @@
 Autor: Luis Fueris Martín
-Fecha: 1-09-2016
-Coms: Documentación sobre el backup [cfreds_2015_data_leakage_pc.dd].
+Fecha: 26-09-2016
+Coms: Documentación sobre las herramientas utilizadas en 
+      el backup [cfreds_2015_data_leakage_pc.dd].
 URL: http://www.cfreds.nist.gov/data_leakage_case/data-leakage-case.html
 
 
@@ -641,5 +642,3 @@ Unallocated 9232  324 ) ` tablemappingmappingCREATE TABLE mapping (inode_number 
 Unallocated 10248 1016  %)%)
 Unallocated 13322 997 'E0Bz0ye6gXtiZaVl8yVU5mWHlGbWc)E0Bz0ye6gXtiZaakx6d3R3c0JmM1U
 Unallocated 19464 1016  }8w \\?\C:\Users\informant\Google Drive\happy_holiday.jpgG \\?\C:\Users\informant\Google Drive\do_u_wanna_build_a_snow_man.mp3
-
-
