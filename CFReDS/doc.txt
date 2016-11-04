@@ -1,7 +1,7 @@
 Autor: Luis Fueris Martín
 Fecha: 26-09-2016
 Coms: Documentación sobre las herramientas utilizadas en 
-      el backup [cfreds_2015_data_leakage_pc.dd].
+      la imagen [cfreds_2015_data_leakage_pc.dd].
 URL: http://www.cfreds.nist.gov/data_leakage_case/data-leakage-case.html
 
 
